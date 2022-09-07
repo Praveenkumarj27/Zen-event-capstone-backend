@@ -73,4 +73,116 @@ router.post("/login", async function (req, res) {
   }
 });
 
+router.post("/capstonetasks", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    req.body.userid = mongodb.ObjectId(req.userid);
+
+    await db.collection("capstoneTasks").insertOne(req.body);
+
+    await connection.close();
+
+    res.json({
+      message: "Capstone Task added sucessfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/hackathontasks", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    req.body.userid = mongodb.ObjectId(req.userid);
+
+    await db.collection("hackathonTasks").insertOne(req.body);
+
+    await connection.close();
+
+    res.json({
+      message: " Hackathon Task added sucessfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/capstonetasks", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    let capstonetask = await db.collection("capstoneTasks").find().toArray();
+
+    await connection.close();
+
+    res.json(capstonetask);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/hackathontasks", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    let hackathontask = await db.collection("hackathonTasks").find().toArray();
+
+    await connection.close();
+
+    res.json(hackathontask);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/hackathonsubmission", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    req.body.userid = mongodb.ObjectId(req.userid);
+
+    await db.collection("hackathonSubmission").insertOne(req.body);
+
+    await connection.close();
+
+    res.json({
+      message: " Hackathon submitted sucessfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/capstonesubmission", async function (req, res) {
+  try {
+    const connection = await mongoClient.connect(url);
+
+    const db = connection.db("zenEvent");
+
+    req.body.userid = mongodb.ObjectId(req.userid);
+
+    await db.collection("capstoneSubmission").insertOne(req.body);
+
+    await connection.close();
+
+    res.json({
+      message: " Capstone submitted sucessfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;
