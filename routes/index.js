@@ -2,17 +2,16 @@ var express = require('express');
 var router = express.Router();
 var dotenv=require('dotenv').config();
 const mongodb=require('mongodb');
-// const url="mongodb+srv://zenEvent:zen123@cluster0.esyrlnn.mongodb.net"
 const url=process.env.URL
 const mongoClient=mongodb.MongoClient;
 const bcryptjs=require("bcryptjs")
 const jwt=require("jsonwebtoken");
 const SECRET = process.env.JWTsecretKey
-
+const {auth}=require("../bin/Auth")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('welcome to Zen Event Management');
+  res.send('Welcome to Zen Event Management');
 });
 
 router.post("/register", async function (req, res) {
@@ -51,7 +50,7 @@ router.post("/login", async function (req, res) {
       if (match) {
         //Token
 
-        const token = jwt.sign({ _id: user._id }, SECRET);
+        const token = jwt.sign({ _id: user._id,typeofUser:user.typeOfUser }, SECRET);
         console.log(token);
 
         res.json({
@@ -184,5 +183,7 @@ router.post("/capstonesubmission", async function (req, res) {
     console.log(error);
   }
 });
+
+
 
 module.exports = router;

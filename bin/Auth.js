@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var dotenv=require('dotenv')
 const saltRound = 10
 
+
 const hashPassword = async (password)=>{
     var salt = await bcrypt.genSalt(saltRound);
     return await bcrypt.hash(password,salt) 
@@ -35,4 +36,33 @@ const authenticate = function (req, res, next) {
         }
     } 
   }
-module.exports={hashCompare,hashPassword,createToken,decodeToken,authenticate}
+
+
+ 
+
+const auth = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1]
+    const isCustomAuth = token.length < 500
+
+    let decodedData
+
+    if (token && isCustomAuth) {
+      decodedData = jwt.verify(token, 'test')
+
+      req.userId = decodedData?.id
+    } else {
+      decodedData = jwt.decode(token)
+
+      req.userId = decodedData?.sub
+    }
+
+    next()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+module.exports={hashCompare,hashPassword,createToken,decodeToken,authenticate,auth}
